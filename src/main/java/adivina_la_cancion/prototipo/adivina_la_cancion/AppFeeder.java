@@ -34,7 +34,7 @@ public class AppFeeder implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-        feedPlaylists();
+        //feedPlaylists();
 
         System.out.println("Application feeded\n\n");
     }
