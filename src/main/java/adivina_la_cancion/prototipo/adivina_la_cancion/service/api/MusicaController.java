@@ -16,7 +16,7 @@ import adivina_la_cancion.prototipo.adivina_la_cancion.service.MusicaService;
 
 @RestController
 @RequestMapping("/musica")
-@CrossOrigin(origins = {"http://localhost:4200", "https://adivina-la-cancion-frontend.onrender.com"} maxAge = 3600)
+@CrossOrigin(origins = {"http://localhost:4200", "https://adivina-la-cancion-frontend.onrender.com"}, maxAge = 3600)
 public class MusicaController {
 
     @Autowired
