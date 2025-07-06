@@ -25,7 +25,7 @@ import adivina_la_cancion.prototipo.adivina_la_cancion.service.PartidaService;
 
 @RestController
 @RequestMapping("/partidas")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600) // Permitir solicitudes desde http://localhost:4200
+@CrossOrigin(origins = {"http://localhost:4200", "https://adivina-la-cancion-frontend.onrender.com"} maxAge = 3600)
 public class PartidaController {
 
     @Autowired
