@@ -3,6 +3,10 @@ package adivina_la_cancion.prototipo.adivina_la_cancion.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -42,7 +46,20 @@ public class DeezerService {
                 .toUriString();
 
         try {
-            String jsonResponse = restTemplate.getForObject(url, String.class);
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("User-Agent", "Mozilla/5.0"); // Esto es clave para evitar el 403
+
+            HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    entity,
+                    String.class
+            );
+
+            String jsonResponse = response.getBody();
+            // String jsonResponse = restTemplate.getForObject(url, String.class);
 
             // En la última página de resultados, Deezer no devuelve "next" y la librería externa de Deezer 
             // espera siempre ese campo, así que se añade manualmente para evitar errores.            
