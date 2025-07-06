@@ -24,6 +24,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
         registry
             .addHandler(partidaHandler, "/webSocketPartida/{partidaID}/{usuarioID}")
             .addInterceptors(customHandshakeInterceptor) // Interceptor para extraer y validar parámetros
-            .setAllowedOrigins("http://localhost:4200"); // Solo permitir conexiones desde localhost:4200
+            .setAllowedOrigins("http://localhost:4200", "https://adivina-la-cancion-frontend.onrender.com");
     }
 }
