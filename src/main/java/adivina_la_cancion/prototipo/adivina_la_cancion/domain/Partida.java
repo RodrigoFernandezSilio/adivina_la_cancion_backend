@@ -63,6 +63,9 @@ public class Partida {
     @JsonView({ Views.PartidaPreview.class })
     private Integer numMaxUsuariosPartida;
 
+    @JsonView({ Views.PartidaPreview.class })
+    private Boolean votoModificable;
+
     private Boolean privada;
 
     private String codigoAcceso;
@@ -79,10 +82,11 @@ public class Partida {
 
 
     public Partida(@NonNull ListaReproduccion listaReproduccion, @NonNull Integer numRondas,
-            @NonNull Integer numMaxUsuariosPartida, @NonNull Boolean privada, String codigoAcceso) {
+            @NonNull Integer numMaxUsuariosPartida, @NonNull Boolean votoModificable, @NonNull Boolean privada, String codigoAcceso) {
         this.listaReproduccion = listaReproduccion;
         this.numRondas = numRondas;
         this.numMaxUsuariosPartida = numMaxUsuariosPartida;
+        this.votoModificable = votoModificable;
         this.privada = privada;
         this.codigoAcceso = codigoAcceso;
         this.rondas = new ArrayList<>();
@@ -191,7 +195,11 @@ public class Partida {
                 respuestas.add(respuesta); // Se añade la nueva respuesta
             // Si ya hay una respuesta para esta ronda
             } else if (indRonda == respuestas.size() - 1) {
-                respuestas.set(indRonda, respuesta); // Se reemplaza la antigua por la nueva
+                // Si el voto es modificable
+                if (votoModificable) {
+                    respuestas.set(indRonda, respuesta); // Se reemplaza la antigua por la nueva
+                }
+                // Si el voto no es modificable, no se hace nada
             }
         }
     }

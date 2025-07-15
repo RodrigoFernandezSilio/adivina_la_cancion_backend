@@ -74,7 +74,7 @@ public class AppFeeder implements CommandLineRunner {
         
         // Partida 1 - Rock
         Partida partida1 = partidaController.crearPartida(
-            new PartidaDTO(listaReproduccionRock.getId(), 3, 10, false, null, user1Id)
+            new PartidaDTO(listaReproduccionRock.getId(), 3, 10, true, false, null, user1Id)
         ).getBody();
         partidaController.anhadirUsuario(partida1.getId(), user2Id, null);
         partidaController.anhadirUsuario(partida1.getId(), user3Id, null);
@@ -86,20 +86,20 @@ public class AppFeeder implements CommandLineRunner {
 
         // Partida 2 - Pop
         Partida partida2 = partidaController.crearPartida(
-            new PartidaDTO(listaReproduccionPop.getId(), 3, 2, false, null, user4Id)
+            new PartidaDTO(listaReproduccionPop.getId(), 3, 2, true, false, null, user4Id)
         ).getBody();
         // partidaController.anhadirUsuario(partida2.getId(), user5Id, null);
         // partidaController.anhadirUsuario(partida2.getId(), user6Id, null);
 
         // Partida 3 - Jazz
         Partida partida3 = partidaController.crearPartida(
-            new PartidaDTO(listaReproduccionJazz.getId(), 10, 6, true, "1234", user7Id)
+            new PartidaDTO(listaReproduccionJazz.getId(), 10, 6, true, true, "1234", user7Id)
         ).getBody();
         partidaController.anhadirUsuario(partida3.getId(), user8Id, "1234");
 
         // Partida 4 - Electrónica
         Partida partida4 = partidaController.crearPartida(
-            new PartidaDTO(listaReproduccionHouse.getId(), 20, 8, false, null, user9Id)
+            new PartidaDTO(listaReproduccionHouse.getId(), 20, 8, true, false, null, user9Id)
         ).getBody();
         partidaController.anhadirUsuario(partida4.getId(), user10Id, null);
     }

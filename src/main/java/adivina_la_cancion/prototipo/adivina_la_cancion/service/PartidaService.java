@@ -142,7 +142,7 @@ public class PartidaService implements ApplicationListener<RespuestaEvent> {
             ListaReproduccion listaReproduccion = listaReproduccionResponseEntity.getBody();
             Usuario usuario = usuarioOptional.get();
 
-            Partida partida = new Partida(listaReproduccion, partidaDTO.getNumRondas(), partidaDTO.getNumMaxUsuariosPartida(),
+            Partida partida = new Partida(listaReproduccion, partidaDTO.getNumRondas(), partidaDTO.getNumMaxUsuariosPartida(), partidaDTO.isVotoModificable(),
                 partidaDTO.isPrivada(), partidaDTO.getCodigoAcceso());
 
             if (partida.anhadirUsuario(usuario, partidaDTO.getCodigoAcceso())) {

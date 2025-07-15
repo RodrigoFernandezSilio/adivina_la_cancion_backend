@@ -13,6 +13,8 @@ public class PartidaDTO {
     
     private int numMaxUsuariosPartida;
 
+    private boolean votoModificable;
+
     private boolean privada;
     
     private String codigoAcceso;    
