@@ -1,5 +1,6 @@
 package adivina_la_cancion.prototipo.adivina_la_cancion.dto;
 
+import adivina_la_cancion.prototipo.adivina_la_cancion.domain.ModoPuntuacion;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -14,6 +15,8 @@ public class PartidaDTO {
     private int numMaxUsuariosPartida;
 
     private boolean votoModificable;
+
+    private ModoPuntuacion modoPuntuacion;
 
     private boolean privada;
     

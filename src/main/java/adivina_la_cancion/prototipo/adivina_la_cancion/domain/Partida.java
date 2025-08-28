@@ -66,6 +66,10 @@ public class Partida {
     @JsonView({ Views.PartidaPreview.class })
     private Boolean votoModificable;
 
+    @Enumerated(EnumType.STRING) // https://www.baeldung.com/jpa-persisting-enums-in-jpa#string
+    @JsonView({ Views.PartidaPreview.class })
+    private ModoPuntuacion modoPuntuacion;
+
     private Boolean privada;
 
     private String codigoAcceso;
@@ -81,12 +85,13 @@ public class Partida {
     private Map<Usuario, ListaRespuesta> respuestasPorUsuario;
 
 
-    public Partida(@NonNull ListaReproduccion listaReproduccion, @NonNull Integer numRondas,
-            @NonNull Integer numMaxUsuariosPartida, @NonNull Boolean votoModificable, @NonNull Boolean privada, String codigoAcceso) {
+    public Partida(@NonNull ListaReproduccion listaReproduccion, @NonNull Integer numRondas, @NonNull Integer numMaxUsuariosPartida,
+            @NonNull Boolean votoModificable, @NonNull ModoPuntuacion modoPuntuacion, @NonNull Boolean privada, String codigoAcceso) {
         this.listaReproduccion = listaReproduccion;
         this.numRondas = numRondas;
         this.numMaxUsuariosPartida = numMaxUsuariosPartida;
         this.votoModificable = votoModificable;
+        this.modoPuntuacion = modoPuntuacion;
         this.privada = privada;
         this.codigoAcceso = codigoAcceso;
         this.rondas = new ArrayList<>();
@@ -240,7 +245,10 @@ public class Partida {
     }
 
     /**
-     * Calcula la puntuación obtenida en una respuesta según la respuesta del jugador.
+     * Calcula la puntuación obtenida en una respuesta según la respuesta del jugador y modo de puntuación.
+     * 
+     * - En modo FIJO: se otorgan 100 puntos por responder correctamente.
+     * - En modo PROGRESIVO: se otorgan hasta 100 puntos por responder correctamente, dependiendo de la rapidez.
      * 
      * La puntuación se compone de 50 puntos por responder correctamente,
      * más un bonus adicional basado en la rapidez de respuesta.
@@ -254,20 +262,46 @@ public class Partida {
      */
     private int calcularPuntuacion(Ronda ronda, Cancion cancionSeleccionada, Instant instanteRespuesta) {
         int puntuacion = 0;
+        switch (modoPuntuacion) {
+            case FIJO:
+                puntuacion = calcularPuntuacionModoFijo(ronda, cancionSeleccionada);
+                break;
+            case PROGRESIVO:
+                puntuacion = calcularPuntuacionModoProgresivo(ronda, cancionSeleccionada, instanteRespuesta);
+            default:
+                break;
+        }
+        return puntuacion;
+    }
 
+    /*
+     * Calcula la puntuación en modo FIJO.
+     * Se otorgan 100 puntos si la canción seleccionada es la correcta; 0 en caso contrario.
+     */
+    private int calcularPuntuacionModoFijo(Ronda ronda, Cancion cancionSeleccionada) {
+        int puntuacion = 0;
         if (ronda.getCancionCorrecta().equals(cancionSeleccionada)) { // La canción seleccionada es la correcta
-            puntuacion = 50; // 50 puntos por responder correctamente
+            puntuacion = 100;
+        }
+        return puntuacion;
+    }
 
+    /*
+     * Calcula la puntuación en modo PROGRESIVO.
+     * Si la respuesta es correcta, se otorgan hasta 100 puntos dependiendo de la rapidez.
+     * Cuanto antes se responde, mayor es la puntuación. Es decir, la puntuación es proporcional al tiempo sobreante,
+     * que es la diferencia tiempo entre el instante de la respuesta y el instante de fin de la ronda.
+     */
+    private int calcularPuntuacionModoProgresivo(Ronda ronda, Cancion cancionSeleccionada, Instant instanteRespuesta) {
+        int puntuacion = 0;
+        if (ronda.getCancionCorrecta().equals(cancionSeleccionada)) { // La canción seleccionada es la correcta
             long tiempoSobrante = Duration.between(instanteRespuesta, ronda.getFinRonda()).toMillis();
 
             int tiempoParaResponderMs = TIEMPO_PARA_RESPONDER * 1000; // Convertir de segundos a milisegundos
 
-            // Calcular el bonus basado en la rapidez de respuesta
-            int bonusPorRapidez = (int) Math.round(50 * ((double) tiempoSobrante / tiempoParaResponderMs));
-
-            puntuacion += bonusPorRapidez;
+            // Calcular la puntuación basada en la rapidez de respuesta
+            puntuacion = (int) Math.round(100 * ((double) tiempoSobrante / tiempoParaResponderMs));
         }
-
         return puntuacion;
     }
 

@@ -143,7 +143,7 @@ public class PartidaService implements ApplicationListener<RespuestaEvent> {
             Usuario usuario = usuarioOptional.get();
 
             Partida partida = new Partida(listaReproduccion, partidaDTO.getNumRondas(), partidaDTO.getNumMaxUsuariosPartida(), partidaDTO.isVotoModificable(),
-                partidaDTO.isPrivada(), partidaDTO.getCodigoAcceso());
+                partidaDTO.getModoPuntuacion(), partidaDTO.isPrivada(), partidaDTO.getCodigoAcceso());
 
             if (partida.anhadirUsuario(usuario, partidaDTO.getCodigoAcceso())) {
                 partidaRepo.save(partida);
